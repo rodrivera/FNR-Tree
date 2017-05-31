@@ -83,12 +83,18 @@ public:
 		void insertInterval(Interval<pair<long, bool>, double> *i)
 		{
 			intervals.push_back(*i);
+			built = false;
 		}
 		void build()
 		{
 			if(!built)
+			{
 				temporalTree = new IntervalTree<pair<long, bool>, double>(intervals);
+			}
 			built = true;
+			// !!! STATIC only !!! {
+				intervals.clear();
+			// }
 		}
 
 	};
@@ -205,7 +211,7 @@ public:
 		D(cout << " -> interval = [" << temporalWindow->start << ", " << temporalWindow->stop << "]" << endl;)
 
 		vector<Interval<pair<long, bool>, double> > auxRes;
-		id->build();
+		//id->build();
 		id->getTemporalTree()->findOverlapping(temporalWindow->start,temporalWindow->stop,auxRes);
 		for(int i=0;i<auxRes.size();i++)
 		{
@@ -229,6 +235,18 @@ public:
 
 		D(cout << "> END   Search." << endl;)
 		return resultArray->size();
+	}
+
+	void Build()
+	{
+		RTree<SpatialLeaf*, int, 2, float>::Iterator it;
+		SpatialLevel->GetFirst(it);
+
+		while(! (SpatialLevel->IsNull(it)) )
+		{
+			(*it)->build();
+			SpatialLevel->GetNext(it);
+		}
 	}
 
 }; 

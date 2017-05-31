@@ -74,6 +74,7 @@ int main(){
 	readEdges("data/Oldenburg/edges.txt", Nodes, &kk);
 
 	readBrinkhoff("data/Oldenburg/node_oldenburg.dat", &kk);
+	kk.Build();
 
 	//                 	ID	(x1,y1)	(x2,y2)	[t1,t2]
 	//kk.InsertTripSegment(1,	9690,7634,	9992,7896,	0,10);
