@@ -11,8 +11,8 @@
 
 #include <iostream>
 #include <vector>
-#include "rtree/RTree.h"
-#include "intervaltree/IntervalTree.h"
+#include "includes/rtree/RTree.h"
+#include "includes/intervaltree/IntervalTree.h"
 
 using namespace std;
 

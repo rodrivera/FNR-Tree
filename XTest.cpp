@@ -70,10 +70,10 @@ int main(){
 	XTree kk = XTree();
 
 	map<long, pair<int,int> > *Nodes = new map<long, pair<int,int> >();
-	readNodes("Oldenburg/nodes.txt", Nodes);
-	readEdges("Oldenburg/edges.txt", Nodes, &kk);
+	readNodes("data/Oldenburg/nodes.txt", Nodes);
+	readEdges("data/Oldenburg/edges.txt", Nodes, &kk);
 
-	readBrinkhoff("Oldenburg/node_oldenburg.dat", &kk);
+	readBrinkhoff("data/Oldenburg/node_oldenburg.dat", &kk);
 
 	//                 	ID	(x1,y1)	(x2,y2)	[t1,t2]
 	//kk.InsertTripSegment(1,	9690,7634,	9992,7896,	0,10);
