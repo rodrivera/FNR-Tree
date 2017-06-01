@@ -47,12 +47,10 @@ void readBrinkhoff(const char *filename, XTree* tree){
 			time  >> currX >> currY >> 
 			speed >> nextX >> nextY)) break;
 
-		if(cls == '0'){ // NEW OBJECT
-//			cout << "NEW " << id <<" "<< time  <<" ("<< currX <<", "<< currY <<") "<< endl;
+		if(cls == '0'){
 			Objects[id] = make_pair(time, make_pair(currX, currY));
 		}
-		else{			// OLD or FINISH
-//			cout << "OLD " << id <<" "<< time  <<" ("<< currX <<", "<< currY <<") "<< endl;
+		else{
 			pair<double, pair<int,int> > lastPos = Objects[id];
 			double t0 = lastPos.first;
 			int x0 = lastPos.second.first;
@@ -65,6 +63,26 @@ void readBrinkhoff(const char *filename, XTree* tree){
 
 }
 
+void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
+	vector<long>* resArray = new vector<long>;
+	ifstream infile(inFilename);
+	ofstream outfile(outFilename);
+	string line;
+	while(getline(infile,line)){
+		istringstream iss(line);
+		int x1, y1, x2, y2;
+		double t1, t2;
+		if(!(iss >> x1 >> y1 >> x2 >> y2 >> t1 >> t2)) break;
+		tree->Search(x1, y1, x2, y2, t1, t2, resArray);
+
+		sort(resArray->begin(),resArray->end());
+		for(int i=0;i<resArray->size();i++) 
+			outfile << (*resArray)[i] << " ";
+		outfile << endl << endl;
+	}
+	outfile.close();
+}
+
 int main(){
 
 	XTree kk = XTree();
@@ -73,39 +91,10 @@ int main(){
 	readNodes("data/Oldenburg/nodes.txt", Nodes);
 	readEdges("data/Oldenburg/edges.txt", Nodes, &kk);
 
-	readBrinkhoff("data/Oldenburg/node_oldenburg.dat", &kk);
+	readBrinkhoff("data/Oldenburg/trajectories.dat", &kk);
 	kk.Build();
 
-	//                 	ID	(x1,y1)	(x2,y2)	[t1,t2]
-	//kk.InsertTripSegment(1,	9690,7634,	9992,7896,	0,10);
-
-	vector<long>* resArray = new vector<long>;
-	kk.Search(9000, 7500, 10000, 8000, 5, 18, resArray);
-	cout << "N hits = "<< resArray->size() << endl; 
-	for(int i=0;i<resArray->size();i++) 
-		cout << (*resArray)[i] << " "; 
-	cout << endl << endl;
-
-	resArray->clear();
-	kk.Search(4500, 3500, 12000, 8400, 2, 19, resArray);
-	cout << "N hits = "<< resArray->size() << endl; 
-	for(int i=0;i<resArray->size();i++) 
-		cout << (*resArray)[i] << " "; 
-	cout << endl << endl;
-
-	resArray->clear();
-	kk.Search(300, 3500, 9900, 7400, 0, 8, resArray);
-	cout << "N hits = "<< resArray->size() << endl; 
-	for(int i=0;i<resArray->size();i++) 
-		cout << (*resArray)[i] << " "; 
-	cout << endl << endl;
-
-	resArray->clear();
-	kk.Search(0, 0, 20000, 20000, 0, 20, resArray);
-	cout << "N hits = "<< resArray->size() << endl; 
-	for(int i=0;i<resArray->size();i++) 
-		cout << (*resArray)[i] << " "; 
-	cout << endl << endl;
+	readQueries("data/Oldenburg/queries.txt","data/X-OldenOut.txt", &kk);
 
 	return 0;
 }
