@@ -36,12 +36,13 @@ struct Rect rects[] =
   Rect(5, 5, 7, 7),
   Rect(8, 5, 9, 6),
   Rect(7, 1, 9, 2),
+  Rect(0, 0, 10, 10)
 };
 
 int nrects = sizeof(rects) / sizeof(rects[0]);
 
 //Rect search_rect(6, 4, 10, 6); // search will find above rects that this one overlaps
-Rect search_rect(1 , 1, 6, 6); // search will find above rects that this one overlaps
+Rect search_rect(0 , 9, 5, 10); // search will find above rects that this one overlaps
 
 bool MySearchCallback(ValueType id, void* arg)
 {
@@ -58,8 +59,8 @@ int main()
   int i, nhits;
   cout << "nrects = " << nrects << "\n";
 
-  vector<string> ss(4);
-  ss[0] = "Cero"; ss[1] = "Uno"; ss[2] = "Dos"; ss[3] = "Tres";
+  vector<string> ss(5);
+  ss[0] = "Cero"; ss[1] = "Uno"; ss[2] = "Dos"; ss[3] = "Tres"; ss[4] = "Cuatro";
 
   for(i=0; i<nrects; i++)
   {

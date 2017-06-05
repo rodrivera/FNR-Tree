@@ -76,6 +76,10 @@ public:
 		{
 			return line;
 		}
+		bool getOrientation()
+		{
+			return orientation;
+		}
 		IntervalTree<pair<long, bool>, double>* getTemporalTree()
 		{
 			return temporalTree;
@@ -199,28 +203,106 @@ public:
 
 	};
 
-	static bool auxSpatialSearch(SpatialLeaf* id, void* arg)
-	{
+	static bool SegmentIntersectRectangle(
+        int rectangleMinX,int rectangleMinY,
+        int rectangleMaxX,int rectangleMaxY,
+        int p1X,int p1Y,int p2X,int p2Y)
+    {
+        int minX = p1X, maxX = p2X;
+        if (p1X > p2X)
+        {
+            minX = p2X;
+            maxX = p1X;
+        }
+        if (maxX > rectangleMaxX)
+        {
+            maxX = rectangleMaxX;
+        }
+        if (minX < rectangleMinX)
+        {
+            minX = rectangleMinX;
+        }
+        if (minX > maxX)
+        {
+            return false;
+        }
+        int minY = p1Y, maxY = p2Y;
+        double dx = p2X - p1X;
+        if (dx != 0)
+        {
+            double a = (p2Y - p1Y)/dx;
+            double b = p1Y - a*p1X;
+            minY = a*minX + b;
+            maxY = a*maxX + b;
+        }
+        if (minY > maxY)
+        {
+            int tmp = maxY;
+            maxY = minY;
+            minY = tmp;
+        }
 
-		D(cout << "  > BEGIN auxSpatialSearch." << endl;)
-		D(cout << "    " << id->nnn;)
-		searchArgs* args = (searchArgs*)arg;
-		Interval<bool>* temporalWindow = args->tWindow;
-		vector<long>* resultArray = args->resultArray;
+        if (maxY > rectangleMaxY)
+        {
+            maxY = rectangleMaxY;
+        }
 
-		D(cout << " -> interval = [" << temporalWindow->start << ", " << temporalWindow->stop << "]" << endl;)
+        if (minY < rectangleMinY)
+        {
+            minY = rectangleMinY;
+        }
 
-		vector<Interval<pair<long, bool>, double> > auxRes;
+        if (minY > maxY)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    static bool auxSpatialSearch(SpatialLeaf* id, void* arg)
+    {
+
+    	D(cout << "  > BEGIN auxSpatialSearch." << endl;)
+    	D(cout << "    " << id->nnn;)
+    	searchArgs* args = (searchArgs*)arg;
+    	Interval<bool>* temporalWindow = args->tWindow;
+    	vector<long>* resultArray = args->resultArray;
+
+    	D(cout << " -> interval = [" << temporalWindow->start << ", " << temporalWindow->stop << "]" << endl;)
+
+    	vector<Interval<pair<long, bool>, double> > auxRes;
 		//id->build();
-		id->getTemporalTree()->findOverlapping(temporalWindow->start,temporalWindow->stop,auxRes);
-		for(int i=0;i<auxRes.size();i++)
-		{
-			resultArray->push_back(auxRes[i].value.first);
-		}
 
-		D(cout << "  > END   auxSpatialSearch." << endl;)
-		return true;
-	}
+    	id->getTemporalTree()->findOverlapping(temporalWindow->start,temporalWindow->stop,auxRes);
+    	if (auxRes.size() > 0)
+    	{
+    		Line* sBox = args->sWindow;
+	    	Line* lSeg = id->getLine();
+	    	bool ori = id->getOrientation();
+    		int p1X,p1Y, p2X,p2Y;
+    		if(ori)
+    		{
+    			p1X = lSeg->min[0]; p1Y = lSeg->max[1];
+    			p2X = lSeg->max[0]; p2Y = lSeg->min[1];
+    		}
+    		else
+    		{
+    			p1X = lSeg->min[0]; p1Y = lSeg->min[1];
+    			p2X = lSeg->max[0]; p2Y = lSeg->max[1];	
+    		}
+
+    		if(SegmentIntersectRectangle(sBox->min[0],sBox->min[1],sBox->max[0],sBox->max[1],p1X, p1Y, p2X, p2Y))
+    		{
+    			for(int i=0;i<auxRes.size();i++)
+    			{
+    				resultArray->push_back(auxRes[i].value.first);
+    			}
+    		}
+    	}
+
+    	D(cout << "  > END   auxSpatialSearch." << endl;)
+    	return true;
+    }
 
 	int Search(int x1, int y1, int x2, int y2, double entranceTime, double exitTime, vector<long>* resultArray)
 	{

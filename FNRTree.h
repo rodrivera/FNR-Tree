@@ -115,7 +115,10 @@ public:
 		{
 			return line;
 		}
-
+		bool getOrientation()
+		{
+			return orientation;
+		}
 		RTree<TemporalLeaf*, double, 1, float>* getTemporalTree()
 		{
 			return temporalTree;
@@ -207,6 +210,7 @@ public:
 		Line* sWindow;
 		Interval* tWindow;
 		vector<long>* resultArray;
+		SpatialLeaf* lf;
 
 		searchArgs();
 		~searchArgs() {};
@@ -218,17 +222,89 @@ public:
 
 	};
 
+	static bool SegmentIntersectRectangle(
+        int rectangleMinX,int rectangleMinY,
+        int rectangleMaxX,int rectangleMaxY,
+        int p1X,int p1Y,int p2X,int p2Y)
+    {
+        int minX = p1X, maxX = p2X;
+        if (p1X > p2X)
+        {
+            minX = p2X;
+            maxX = p1X;
+        }
+        if (maxX > rectangleMaxX)
+        {
+            maxX = rectangleMaxX;
+        }
+        if (minX < rectangleMinX)
+        {
+            minX = rectangleMinX;
+        }
+        if (minX > maxX)
+        {
+            return false;
+        }
+        int minY = p1Y, maxY = p2Y;
+        double dx = p2X - p1X;
+        if (dx != 0)
+        {
+            double a = (p2Y - p1Y)/dx;
+            double b = p1Y - a*p1X;
+            minY = a*minX + b;
+            maxY = a*maxX + b;
+        }
+        if (minY > maxY)
+        {
+            int tmp = maxY;
+            maxY = minY;
+            minY = tmp;
+        }
+
+        if (maxY > rectangleMaxY)
+        {
+            maxY = rectangleMaxY;
+        }
+
+        if (minY < rectangleMinY)
+        {
+            minY = rectangleMinY;
+        }
+
+        if (minY > maxY)
+        {
+            return false;
+        }
+        return true;
+    }
+
 	static bool auxTemporalSearch(TemporalLeaf* id, void* arg)
 	{
 		D(cout << "    > BEGIN auxTemporalSearch." << endl;)		
 		D(cout << "      Found: " << id->getId() << " -> [" << id->getInterval()->timeIn[0] << ", " << id->getInterval()->timeOut[0] <<"]"<< endl;)
 
 		searchArgs* args = (searchArgs*)arg;
-		vector<long>* resultArray = args->resultArray;
+		Line* sBox = args->sWindow;
+		Line* lSeg = args->lf->getLine();
+		bool ori = args->lf->getOrientation();
 
-		resultArray->push_back(id->getId());
+		int p1X,p1Y, p2X,p2Y;
+		if(ori)
+		{
+			p1X = lSeg->min[0]; p1Y = lSeg->max[1];
+			p2X = lSeg->max[0]; p2Y = lSeg->min[1];
+		}
+		else
+		{
+			p1X = lSeg->min[0]; p1Y = lSeg->min[1];
+			p2X = lSeg->max[0]; p2Y = lSeg->max[1];	
+		}
 
-
+		if(SegmentIntersectRectangle(sBox->min[0],sBox->min[1],sBox->max[0],sBox->max[1],p1X, p1Y, p2X, p2Y))
+		{
+			vector<long>* resultArray = args->resultArray;
+			resultArray->push_back(id->getId());
+		}
 		D(cout << "    > END   auxTemporalSearch." << endl;)
 		return true;
 	}
@@ -240,6 +316,7 @@ public:
 		D(cout << "    " << id->nnn;)
 		searchArgs* args = (searchArgs*)arg;
 		Interval* temporalWindow = args->tWindow;
+		args->lf = id;
 
 		D(cout << " -> interval = [" << temporalWindow->timeIn[0] << ", " << temporalWindow->timeOut[0] << "]" << endl;)
 
