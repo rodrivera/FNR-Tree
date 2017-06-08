@@ -83,18 +83,31 @@ void readQueries(const char *inFilename, const char *outFilename, FNRTree* tree)
 	outfile.close();
 }
 
-int main(){
+int main(int argc, char const *argv[])
+{
+
+	if(argc != 6)
+	{
+		cout << "Usage: ./fnrtest [nodesFile] [edgesFile] [trajectoriesFile] [queriesFile] [outfile]" << endl;
+		//return -1;
+	}
+
+	const char* nodesFile 			= argv[1];
+	const char* edgesFile 			= argv[2];
+	const char* trajectoriesFile 	= argv[3];
+	const char* queriesFile 		= argv[4];
+	const char* outFile 			= argv[5];
 
 	FNRTree kk = FNRTree();
 
 	map<long, pair<int,int> > *Nodes = new map<long, pair<int,int> >();
-	readNodes("data/Oldenburg/nodes.txt", Nodes);
-	readEdges("data/Oldenburg/edges.txt", Nodes, &kk);
-
-	readBrinkhoff("data/Oldenburg/trajectories.dat", &kk);
-
-
-	readQueries("data/Oldenburg/queries.txt","data/FNR-OldenOut.txt", &kk);
+	readNodes(nodesFile, Nodes);
+	readEdges(edgesFile, Nodes, &kk);
+	
+	readBrinkhoff(trajectoriesFile, &kk);
+	
+	
+	readQueries(queriesFile, outFile, &kk);
 
 	return 0;
 }

@@ -83,18 +83,31 @@ void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
 	outfile.close();
 }
 
-int main(){
+int main(int argc, char const *argv[])
+{
+
+	if(argc != 6)
+	{
+		cout << "Usage: ./fnrtest [nodesFile] [edgesFile] [trajectoriesFile] [queriesFile] [outfile]" << endl;
+		return -1;
+	}
+
+	const char* nodesFile 			= argv[1];
+	const char* edgesFile 			= argv[2];
+	const char* trajectoriesFile 	= argv[3];
+	const char* queriesFile 		= argv[4];
+	const char* outFile 			= argv[5];
 
 	XTree kk = XTree();
 
 	map<long, pair<int,int> > *Nodes = new map<long, pair<int,int> >();
-	readNodes("data/Oldenburg/nodes.txt", Nodes);
-	readEdges("data/Oldenburg/edges.txt", Nodes, &kk);
-
-	readBrinkhoff("data/Oldenburg/trajectories.dat", &kk);
+	readNodes(nodesFile, Nodes);
+	readEdges(edgesFile, Nodes, &kk);
+	
+	readBrinkhoff(trajectoriesFile, &kk);
 	kk.Build();
-
-	readQueries("data/Oldenburg/queries.txt","data/X-OldenOut.txt", &kk);
+	
+	readQueries(queriesFile, outFile, &kk);
 
 	return 0;
 }
