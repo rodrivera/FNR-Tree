@@ -8,9 +8,9 @@ queries="$AUX""data/Oldenburg/queries.txt"
 declare -a SUFFIXES=("200" "400" "800" "1200" "1600" "2000")
 for N in "${SUFFIXES[@]}"
 do
-	trajectories="$AUX""data/Oldenburg/trajectories""$N"".dat"
-	outFNR="$AUX""data/FNR-""$N"".txt"
-	outX="$AUX""data/X-""$N"".txt"
+	trajectories="$AUX""data/Oldenburg/trajectories/""$N"".dat"
+	outFNR="$AUX""data/Oldenburg/output/FNR/""$N"".txt"
+	outX="$AUX""data/Oldenburg/output/X/""$N"".txt"
 	echo "Executing.. FNR with ""$N"" objects.."
 	time ./"$AUX"fnrtest.out $network $trajectories $queries $outFNR
 	echo "Executing.. X with ""$N"" objects.."
