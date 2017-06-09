@@ -59,6 +59,7 @@ public:
 		IntervalTree<pair<long, bool>, double > *temporalTree;
 		vector<Interval<pair<long, bool>, double> > intervals;
 		Line* line;
+		size_t num_intervals;
 
 	public:
 		string nnn;
@@ -97,10 +98,18 @@ public:
 			}
 			built = true;
 			// !!! STATIC only !!! {
+				num_intervals = intervals.size();
 				intervals.clear();
 			// }
 		}
+		size_t size()
+		{
+			size_t totalSize = sizeof(SpatialLeaf) + sizeof(Line) + sizeof(IntervalTree<pair<long, bool>, double >);
 
+			totalSize += num_intervals*sizeof(intervals[0]);
+
+			return totalSize;
+		}
 	};
 
 	int networkSize()
@@ -329,6 +338,22 @@ public:
 			(*it)->build();
 			SpatialLevel->GetNext(it);
 		}
+	}
+
+	size_t size()
+	{
+		size_t totalSize = sizeof(SpatialLevel);
+
+		RTree<SpatialLeaf*, int, 2, float>::Iterator it;
+		SpatialLevel->GetFirst(it);
+
+		while(! (SpatialLevel->IsNull(it)) )
+		{
+			totalSize += (*it)->size();
+			SpatialLevel->GetNext(it);
+		}
+
+		return totalSize;
 	}
 
 }; 

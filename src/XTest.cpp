@@ -106,7 +106,8 @@ int main(int argc, char const *argv[])
 	
 	readBrinkhoff(trajectoriesFile, &kk);
 	kk.Build();
-	
+	cout << " > FNR-Tree MEMORY USAGE : " << kk.size() << " Bytes";
+
 	readQueries(queriesFile, outFile, &kk);
 
 	return 0;

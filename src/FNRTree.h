@@ -90,6 +90,11 @@ public:
 		{
 			return interval;
 		}
+		size_t size()
+		{
+			size_t totalSize = sizeof(TemporalLeaf) + sizeof(Interval);
+			return totalSize;
+		}
 	};
 
 	class SpatialLeaf
@@ -122,7 +127,22 @@ public:
 		RTree<TemporalLeaf*, double, 1, float>* getTemporalTree()
 		{
 			return temporalTree;
-		}		
+		}
+		size_t size()
+		{
+			size_t totalSize = sizeof(SpatialLeaf) + sizeof(Line) + sizeof(RTree<TemporalLeaf*, double, 1, float>);
+
+			RTree<TemporalLeaf*, double, 1, float>::Iterator it;
+			temporalTree->GetFirst(it);
+
+			while(! (temporalTree->IsNull(it)) )
+			{
+				totalSize += (*it)->size();
+				temporalTree->GetNext(it);
+			}
+
+			return totalSize;
+		}
 	};
 
 	int networkSize()
@@ -338,6 +358,22 @@ public:
 
 		D(cout << "> END   Search." << endl;)
 		return resultArray->size();
+	}
+
+	size_t size()
+	{
+		size_t totalSize = sizeof(SpatialLevel);
+
+		RTree<SpatialLeaf*, int, 2, float>::Iterator it;
+		SpatialLevel->GetFirst(it);
+
+		while(! (SpatialLevel->IsNull(it)) )
+		{
+			totalSize += (*it)->size();
+			SpatialLevel->GetNext(it);
+		}
+
+		return totalSize;
 	}
 
 }; 
