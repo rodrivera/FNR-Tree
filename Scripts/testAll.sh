@@ -2,7 +2,7 @@
 AUX=""
 #AUX="../"
 
-network="$AUX""data/Oldenburg/nodes.txt data/Oldenburg/edges.txt"
+network="$AUX""data/Oldenburg/nodes.txt ""$AUX""data/Oldenburg/edges.txt"
 queries="$AUX""data/Oldenburg/queries.txt"
 
 declare -a SUFFIXES=("200" "400" "800" "1200" "1600" "2000")
