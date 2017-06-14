@@ -7,25 +7,38 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
 	
-	//int minX = 281, maxX = 2854;
-	int minX = 1, maxX = 100;
-	//int minY = 3935, maxY = 30851;
-	int minY = 1, maxY = 100;
+	if (argc < 5){
+		cout << "Usage: ./gen num_queries percX percY percT" << endl;
+		cout << "percX, percY and percT must be float numbers between 0 and 1 (inclusive)." << endl;
+		return -1;
+	}
 
+	int minX = 281, maxX = 2854;
+	int minY = 3935, maxY = 30851;
 	double minT = 1, maxT = 100; 
 
-	int dX = maxX-minX+1, dY = maxY-minY+1;
-	double dT = maxT-minT+1;
+	int dX = maxX-minX, dY = maxY-minY;
+	double dT = maxT-minT;
 
-	float percX = 0.5, percY = 0.5, percT = 0.5;
+	int num = atoi(argv[1]);
+	float percX = atof(argv[2]), percY = atof(argv[3]), percT = atof(argv[4]);
 
 	srand(time(NULL));
 
-	int 	qX1 = rand()%(int)round((1.0-percX)*dX) + minX, 	qX2 = qX1 + percX*dX;
-	int 	qY1 = rand()%(int)round((1.0-percY)*dY) + minY, 	qY2 = qY1 + percY*dY;
-	double 	qT1 = fmod(rand(),(1.0-percT)*dT) + minT, 	qT2 = qT1 + percT*dT;
+	int rX = round((1.0-percX)*dX), rY = round((1.0-percY)*dY);
+	double rT = (1.0-percT)*dT;
 
-	cout << qX1 << " " << qX2 << " " << qY1 << " " << qY2 << " " << qT1 << " " << qT2 << endl;
+	for (int i = 0; i < num; ++i){
+		int qX1 = (rX != 0)? rand()%rX + minX : minX;
+		int qX2 = qX1 + percX*dX;
+		int qY1 = (rY != 0)? rand()%rY + minY : minY;
+		int qY2 = qY1 + percY*dY;
+		double qT1 = (rT != 0)? fmod(rand(),rT) + minT : minT;
+		double qT2 = qT1 + percT*dT;
+
+		cout << qX1 << " " << qX2 << " " << qY1 << " " << qY2 << " " << qT1 << " " << qT2 << endl;
+	}
+	
 
 	return 0;
 }

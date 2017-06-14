@@ -3,7 +3,7 @@ AUX=""
 #AUX="../"
 
 network="$AUX""data/Oldenburg/nodes.txt ""$AUX""data/Oldenburg/edges.txt"
-queries="$AUX""data/Oldenburg/queries.txt"
+queries="$AUX""data/Oldenburg/queries/1_1_1.txt"
 
 declare -a SUFFIXES=("200" "400" "800" "1200" "1600" "2000")
 for N in "${SUFFIXES[@]}"

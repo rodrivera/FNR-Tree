@@ -1,7 +1,7 @@
 #include <iostream>
 #include "FNRTree.h"
 
-#include <vector>
+#include <set>
 #include <map>
 #include <fstream>
 #include <sstream>
@@ -64,10 +64,11 @@ void readBrinkhoff(const char *filename, FNRTree* tree){
 }
 
 void readQueries(const char *inFilename, const char *outFilename, FNRTree* tree){
-	vector<long>* resArray = new vector<long>;
+	set<long>* resArray = new set<long>;
 	ifstream infile(inFilename);
 	ofstream outfile(outFilename);
 	string line;
+	int cont = 1;
 	while(getline(infile,line)){
 		istringstream iss(line);
 		int x1, y1, x2, y2;
@@ -75,9 +76,10 @@ void readQueries(const char *inFilename, const char *outFilename, FNRTree* tree)
 		if(!(iss >> x1 >> y1 >> x2 >> y2 >> t1 >> t2)) break;
 		tree->Search(x1, y1, x2, y2, t1, t2, resArray);
 
-		sort(resArray->begin(),resArray->end());
-		for(int i=0;i<resArray->size();i++) 
-			outfile << (*resArray)[i] << " ";
+		outfile << "Test #" << cont++ << endl;
+		for (set<long>::iterator it=resArray->begin(); it!=resArray->end(); ++it){
+			outfile << *it << " ";
+		}
 		outfile << endl << endl;
 	}
 	outfile.close();

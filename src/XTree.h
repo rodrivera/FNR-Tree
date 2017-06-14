@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
 #include "includes/rtree/RTree.h"
 #include "includes/intervaltree/IntervalTree.h"
 
@@ -200,11 +201,11 @@ public:
 	public:
 		Line* sWindow;
 		Interval<bool>* tWindow;
-		vector<long>* resultArray;
+		set<long>* resultArray;
 
 		searchArgs();
 		~searchArgs() {};
-		searchArgs(Line* l, Interval<bool>* i, vector<long>* r){
+		searchArgs(Line* l, Interval<bool>* i, set<long>* r){
 			sWindow = l;
 			tWindow = i;
 			resultArray = r;
@@ -275,7 +276,7 @@ public:
     	D(cout << "    " << id->nnn;)
     	searchArgs* args = (searchArgs*)arg;
     	Interval<bool>* temporalWindow = args->tWindow;
-    	vector<long>* resultArray = args->resultArray;
+    	set<long>* resultArray = args->resultArray;
 
     	D(cout << " -> interval = [" << temporalWindow->start << ", " << temporalWindow->stop << "]" << endl;)
 
@@ -304,7 +305,7 @@ public:
     		{
     			for(int i=0;i<auxRes.size();i++)
     			{
-    				resultArray->push_back(auxRes[i].value.first);
+    				resultArray->insert(auxRes[i].value.first);
     			}
     		}
     	}
@@ -313,7 +314,7 @@ public:
     	return true;
     }
 
-	int Search(int x1, int y1, int x2, int y2, double entranceTime, double exitTime, vector<long>* resultArray)
+	int Search(int x1, int y1, int x2, int y2, double entranceTime, double exitTime, set<long>* resultArray)
 	{
 		D(cout << "> BEGIN Search." << endl;)
 

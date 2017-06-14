@@ -1,7 +1,7 @@
 #include <iostream>
 #include "XTree.h"
 
-#include <vector>
+#include <set>
 #include <map>
 #include <fstream>
 #include <sstream>
@@ -64,10 +64,11 @@ void readBrinkhoff(const char *filename, XTree* tree){
 }
 
 void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
-	vector<long>* resArray = new vector<long>;
+	set<long>* resArray = new set<long>;
 	ifstream infile(inFilename);
 	ofstream outfile(outFilename);
 	string line;
+	int cont = 1;
 	while(getline(infile,line)){
 		istringstream iss(line);
 		int x1, y1, x2, y2;
@@ -75,9 +76,10 @@ void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
 		if(!(iss >> x1 >> y1 >> x2 >> y2 >> t1 >> t2)) break;
 		tree->Search(x1, y1, x2, y2, t1, t2, resArray);
 
-		sort(resArray->begin(),resArray->end());
-		for(int i=0;i<resArray->size();i++) 
-			outfile << (*resArray)[i] << " ";
+		outfile << "Test #" << cont++ << endl;
+		for (set<long>::iterator it=resArray->begin(); it!=resArray->end(); ++it){
+			outfile << *it << " ";
+		}
 		outfile << endl << endl;
 	}
 	outfile.close();
@@ -88,7 +90,7 @@ int main(int argc, char const *argv[])
 
 	if(argc != 6)
 	{
-		cout << "Usage: ./fnrtest [nodesFile] [edgesFile] [trajectoriesFile] [queriesFile] [outfile]" << endl;
+		cout << "Usage: ./xtest [nodesFile] [edgesFile] [trajectoriesFile] [queriesFile] [outfile]" << endl;
 		return -1;
 	}
 

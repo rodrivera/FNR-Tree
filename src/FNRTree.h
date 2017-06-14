@@ -10,7 +10,7 @@
 #endif
 
 #include <iostream>
-#include <vector>
+#include <set>
 #include "includes/rtree/RTree.h"
 
 using namespace std;
@@ -229,12 +229,12 @@ public:
 	public:
 		Line* sWindow;
 		Interval* tWindow;
-		vector<long>* resultArray;
+		set<long>* resultArray;
 		SpatialLeaf* lf;
 
 		searchArgs();
 		~searchArgs() {};
-		searchArgs(Line* l, Interval* i, vector<long>* r){
+		searchArgs(Line* l, Interval* i, set<long>* r){
 			sWindow = l;
 			tWindow = i;
 			resultArray = r;
@@ -322,8 +322,8 @@ public:
 
 		if(SegmentIntersectRectangle(sBox->min[0],sBox->min[1],sBox->max[0],sBox->max[1],p1X, p1Y, p2X, p2Y))
 		{
-			vector<long>* resultArray = args->resultArray;
-			resultArray->push_back(id->getId());
+			set<long>* resultArray = args->resultArray;
+			resultArray->insert(id->getId());
 		}
 		D(cout << "    > END   auxTemporalSearch." << endl;)
 		return true;
@@ -345,7 +345,7 @@ public:
 		return true;
 	}
 
-	int Search(int x1, int y1, int x2, int y2, double entranceTime, double exitTime, vector<long>* resultArray)
+	int Search(int x1, int y1, int x2, int y2, double entranceTime, double exitTime, set<long>* resultArray)
 	{
 		D(cout << "> BEGIN Search." << endl;)
 
