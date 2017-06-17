@@ -6,6 +6,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <chrono>
+
 using namespace std;
 
 void readNodes(const char *filename, map<long, pair<int,int> > *m){
@@ -69,12 +71,20 @@ void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
 	ofstream outfile(outFilename);
 	string line;
 	int cont = 1;
+
+	chrono::microseconds duration(0);
+
 	while(getline(infile,line)){
 		istringstream iss(line);
 		int x1, y1, x2, y2;
 		double t1, t2;
 		if(!(iss >> x1 >> y1 >> x2 >> y2 >> t1 >> t2)) break;
+
+		chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 		tree->Search(x1, y1, x2, y2, t1, t2, resArray);
+		chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
+		
+		duration += chrono::duration_cast<chrono::microseconds>( end - start );	
 
 		outfile << "Test #" << cont++ << endl;
 		for (set<long>::iterator it=resArray->begin(); it!=resArray->end(); ++it){
@@ -82,6 +92,8 @@ void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
 		}
 		outfile << endl << endl;
 	}
+
+	cout << "   > Queries time  = " << duration.count() << " ms" << endl;
 	outfile.close();
 }
 
@@ -103,14 +115,20 @@ int main(int argc, char const *argv[])
 	XTree kk = XTree();
 
 	map<long, pair<int,int> > *Nodes = new map<long, pair<int,int> >();
+	//chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 	readNodes(nodesFile, Nodes);
 	readEdges(edgesFile, Nodes, &kk);
 	
+	chrono::high_resolution_clock::time_point start2 = chrono::high_resolution_clock::now();
 	readBrinkhoff(trajectoriesFile, &kk);
 	kk.Build();
-	cout << " > FNR-Tree MEMORY USAGE : " << kk.size() << " Bytes";
+	chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
+
+	cout << " >   X-Tree indicators:\n   > MEMORY USAGE : " << kk.size() << " Bytes" << endl;
+	cout << "   > Building time = " << chrono::duration_cast<chrono::microseconds>( end - start2 ).count() << " ms"<< endl;
 
 	readQueries(queriesFile, outFile, &kk);
+	cout << endl;
 
 	return 0;
 }

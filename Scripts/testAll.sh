@@ -20,9 +20,9 @@ do
 	outFNR="$AUX""data/Oldenburg/output/FNR/""$qFile""-""$N"".txt"
 	outX="$AUX""data/Oldenburg/output/X/""$qFile""-""$N"".txt"
 	echo "Executing.. FNR with ""$N"" objects.."
-	time ./"$AUX"fnrtest.out $network $trajectories $queries $outFNR
+	./"$AUX"fnrtest.out $network $trajectories $queries $outFNR
 	echo "Executing.. X with ""$N"" objects.."
-	time ./"$AUX"xtest.out $network $trajectories $queries $outX
+	./"$AUX"xtest.out $network $trajectories $queries $outX
 
 	echo ""; echo "Checking differences between Output files.."
 	if diff $outFNR $outX >/dev/null; then
