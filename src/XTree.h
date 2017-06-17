@@ -200,12 +200,12 @@ public:
 	{
 	public:
 		Line* sWindow;
-		Interval<bool>* tWindow;
+		Interval<bool, double>* tWindow;
 		set<long>* resultArray;
 
 		searchArgs();
 		~searchArgs() {};
-		searchArgs(Line* l, Interval<bool>* i, set<long>* r){
+		searchArgs(Line* l, Interval<bool, double>* i, set<long>* r){
 			sWindow = l;
 			tWindow = i;
 			resultArray = r;
@@ -275,7 +275,7 @@ public:
     	D(cout << "  > BEGIN auxSpatialSearch." << endl;)
     	D(cout << "    " << id->nnn;)
     	searchArgs* args = (searchArgs*)arg;
-    	Interval<bool>* temporalWindow = args->tWindow;
+    	Interval<bool, double>* temporalWindow = args->tWindow;
     	set<long>* resultArray = args->resultArray;
 
     	D(cout << " -> interval = [" << temporalWindow->start << ", " << temporalWindow->stop << "]" << endl;)
@@ -320,7 +320,7 @@ public:
 
 		resultArray->clear();
 		Line* spatialWindow = new Line(min(x1,x2), min(y1,y2), max(x1,x2), max(y1,y2));
-		Interval<bool>* temporalWindow = new Interval<bool>(entranceTime,exitTime,false);
+		Interval<bool, double>* temporalWindow = new Interval<bool, double>(entranceTime,exitTime,false);
 		searchArgs* args = new searchArgs(spatialWindow, temporalWindow, resultArray);
 
 		SpatialLevel->Search(spatialWindow->min, spatialWindow->max, auxSpatialSearch, (void*)args);
