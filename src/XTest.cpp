@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include <chrono>
+#include <iomanip>
 
 using namespace std;
 
@@ -93,7 +94,7 @@ void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
 		outfile << endl << endl;
 	}
 
-	cout << "   > Queries time  = " << duration.count() << " ms" << endl;
+	cout << "   > Queries time  = " << right << setw(10) << duration.count() << " microseconds" << endl;
 	outfile.close();
 }
 
@@ -124,8 +125,9 @@ int main(int argc, char const *argv[])
 	kk.Build();
 	chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
 
-	cout << " >   X-Tree indicators:\n   > MEMORY USAGE : " << kk.size() << " Bytes" << endl;
-	cout << "   > Building time = " << chrono::duration_cast<chrono::microseconds>( end - start2 ).count() << " ms"<< endl;
+	cout << ">   X-Tree indicators:" << endl;
+	cout << "   > MEMORY USAGE  = " << right << setw(10) << kk.size() << " Bytes" << endl;
+	cout << "   > Building time = " << right << setw(10) << chrono::duration_cast<chrono::microseconds>( end - start2 ).count() << " microseconds" << endl;
 
 	readQueries(queriesFile, outFile, &kk);
 	cout << endl;

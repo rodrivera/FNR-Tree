@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
 
 	int minX = 281, maxX = 2854;
 	int minY = 3935, maxY = 30851;
-	double minT = 1, maxT = 100; 
+	double minT = 1.0, maxT = 100.0; 
 
 	int dX = maxX-minX, dY = maxY-minY;
 	double dT = maxT-minT;
