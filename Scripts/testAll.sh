@@ -3,8 +3,8 @@ AUX=""
 #AUX="../"
 
 network="$AUX""data/Oldenburg/nodes.txt ""$AUX""data/Oldenburg/edges.txt"
-qFile="$1""_""$2""_""$3"".txt"
-queries="$AUX""data/Oldenburg/queries/""$qFile"
+qFile="$1""_""$2""_""$3"
+queries="$AUX""data/Oldenburg/queries/""$qFile"".txt"
 
 if [ ! -f "$queries" ]; then
     echo "Queries file not found!"
