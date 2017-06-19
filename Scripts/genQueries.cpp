@@ -6,16 +6,16 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-	
+
 	if (argc < 5){
 		cout << "Usage: ./gen num_queries percX percY percT" << endl;
 		cout << "percX, percY and percT must be float numbers between 0 and 1 (inclusive)." << endl;
 		return -1;
 	}
 
-	int minX = 281, maxX = 2854;
-	int minY = 3935, maxY = 30851;
-	double minT = 1.0, maxT = 100.0; 
+	//int minX = 281, maxX = 2854; int minY = 3935, maxY = 30851; // Oldenburg
+	int minX = 56977411, maxX = 58790663; int minY = 51682794, maxY = 53102345; // San Francisco
+	double minT = 1.0, maxT = 100.0;
 
 	int dX = maxX-minX, dY = maxY-minY;
 	double dT = maxT-minT;
@@ -38,7 +38,6 @@ int main(int argc, char const *argv[])
 
 		cout << qX1 << " " << qX2 << " " << qY1 << " " << qY2 << " " << qT1 << " " << qT2 << endl;
 	}
-	
 
 	return 0;
 }
