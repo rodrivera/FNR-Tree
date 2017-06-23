@@ -94,7 +94,9 @@ void readQueries(const char *inFilename, const char *outFilename, FNRTree* tree)
 		outfile << endl << endl;
 	}
 
-	cout << "   > Queries time  = " << right << setw(10) << duration.count() << " microseconds" << endl;
+	//cout << "   > Queries time  = " << right << setw(10);
+	cout << duration.count(); cout << endl;
+	//cout << " microseconds" << endl;
 	outfile.close();
 }
 
@@ -125,12 +127,16 @@ int main(int argc, char const *argv[])
 	
 	chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
 	
-	cout << "> FNR-Tree indicators:" << endl;
-	cout << "   > MEMORY USAGE  = " << right << setw(10) << kk.size() << " Bytes" << endl;
-	cout << "   > Building time = " << right << setw(10) << chrono::duration_cast<chrono::microseconds>( end - start2 ).count() << " microseconds" << endl;
-	
+	//cout << "> FNR-Tree indicators:" << endl;
+	//cout << "   > MEMORY USAGE  = " << right << setw(10);
+	cout << kk.size(); cout << endl;
+	//cout << " Bytes" << endl;
+	//cout << "   > Building time = " << right << setw(10);
+	cout << chrono::duration_cast<chrono::microseconds>( end - start2 ).count(); cout << endl;
+	//cout << " microseconds" << endl;
+
 	readQueries(queriesFile, outFile, &kk);
-	cout << endl;
+	//cout << endl;
 
 	return 0;
 }

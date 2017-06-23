@@ -13,8 +13,8 @@ int main(int argc, char const *argv[])
 		return -1;
 	}
 
-	//int minX = 281, maxX = 2854; int minY = 3935, maxY = 30851; 					// Oldenburg
-	int minX = 56977411, maxX = 58790663; int minY = 51682794, maxY = 53102345; 	// San Francisco
+	int minX = 281, maxX = 2854; int minY = 3935, maxY = 30851; 					// Oldenburg
+	//int minX = 56977411, maxX = 58790663; int minY = 51682794, maxY = 53102345; 	// San Francisco
 
 	double minT = 1.0, maxT = 100.0;
 
@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
 		double qT1 = (rT != 0)? fmod(rand(),rT) + minT : minT;
 		double qT2 = qT1 + percT*dT;
 
-		cout << qX1 << " " << qX2 << " " << qY1 << " " << qY2 << " " << qT1 << " " << qT2 << endl;
+		cout << qX1 << " " << qY1 << " " << qX2 << " " << qY2 << " " << qT1 << " " << qT2 << endl;
 	}
 
 	return 0;

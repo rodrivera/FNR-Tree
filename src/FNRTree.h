@@ -331,7 +331,6 @@ public:
 
 	static bool auxSpatialSearch(SpatialLeaf* id, void* arg)
 	{
-
 		D(cout << "  > BEGIN auxSpatialSearch." << endl;)
 		D(cout << "    " << id->nnn;)
 		searchArgs* args = (searchArgs*)arg;
@@ -353,6 +352,8 @@ public:
 		Line* spatialWindow = new Line(min(x1,x2), min(y1,y2), max(x1,x2), max(y1,y2));
 		Interval* temporalWindow = new Interval(entranceTime,exitTime);
 		searchArgs* args = new searchArgs(spatialWindow, temporalWindow, resultArray);
+
+		D(cout << "    sWindow : (" << spatialWindow->min[0] << " ," << spatialWindow->min[1] << ") ,(" << spatialWindow->max[0] << " ," << spatialWindow->max[1] << ")" << endl;)
 
 		SpatialLevel->Search(spatialWindow->min, spatialWindow->max, auxSpatialSearch, (void*)args);
 

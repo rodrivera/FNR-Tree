@@ -22,9 +22,10 @@ do
 	trajectories="$AUX""data/""$city""/trajectories/""$N"".dat"
 	outFNR="$AUX""data/""$city""/output/FNR/""$qFile""-""$N"".txt"
 	outX="$AUX""data/""$city""/output/X/""$qFile""-""$N"".txt"
-	echo "Executing.. FNR with ""$N"" objects.."
+	echo "----- Starting tests for ""$N"" objects.. -----"
+	#echo "Executing.. FNR with ""$N"" objects.."
 	./"$AUX"fnrtest.out $network $trajectories $queries $outFNR
-	echo "Executing.. X with ""$N"" objects.."
+	#echo "Executing..   X with ""$N"" objects.."
 	./"$AUX"xtest.out $network $trajectories $queries $outX
 
 	echo ""; echo "Checking differences between Output files.."
