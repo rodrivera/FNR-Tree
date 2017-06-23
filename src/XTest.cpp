@@ -60,7 +60,7 @@ void readBrinkhoff(const char *filename, XTree* tree){
 			int y0 = lastPos.second.second;
 			tree->InsertTripSegment(id,x0,y0,currX,currY,t0,time);
 			Objects[id] = make_pair(time,make_pair(currX,currY));
-			
+
 		}
 	}
 
@@ -84,7 +84,7 @@ void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
 		chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 		tree->Search(x1, y1, x2, y2, t1, t2, resArray);
 		chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
-		
+
 		duration += chrono::duration_cast<chrono::microseconds>( end - start );	
 
 		outfile << "Test #" << cont++ << endl;
@@ -94,9 +94,9 @@ void readQueries(const char *inFilename, const char *outFilename, XTree* tree){
 		outfile << endl << endl;
 	}
 
-	//cout << "   > Queries time  = " << right << setw(10);
-	cout << duration.count(); cout << endl;
-	//cout << " microseconds" << endl;
+	cout << "   > Queries time  = " << right << setw(10);
+	cout << duration.count();
+	cout << " microseconds" << endl;
 	outfile.close();
 }
 
@@ -121,19 +121,19 @@ int main(int argc, char const *argv[])
 	//chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 	readNodes(nodesFile, Nodes);
 	readEdges(edgesFile, Nodes, &kk);
-	
+
 	chrono::high_resolution_clock::time_point start2 = chrono::high_resolution_clock::now();
 	readBrinkhoff(trajectoriesFile, &kk);
 	kk.Build();
 	chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
 
-	//cout << ">   X-Tree indicators:" << endl;
-	//cout << "   > MEMORY USAGE  = " << right << setw(10);
-	cout << kk.size(); cout << endl;
-	//cout << " Bytes" << endl;
-	//cout << "   > Building time = " << right << setw(10);
-	cout << chrono::duration_cast<chrono::microseconds>( end - start2 ).count(); cout << endl;
-	//cout << " microseconds" << endl;
+	cout << ">   X-Tree indicators:" << endl;
+	cout << "   > MEMORY USAGE  = " << right << setw(10);
+	cout << kk.size();
+	cout << " Bytes" << endl;
+	cout << "   > Building time = " << right << setw(10);
+	cout << chrono::duration_cast<chrono::microseconds>( end - start2 ).count();
+	cout << " microseconds" << endl;
 
 	readQueries(queriesFile, outFile, &kk);
 	cout << endl;

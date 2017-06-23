@@ -84,7 +84,7 @@ void readQueries(const char *inFilename, const char *outFilename, FNRTree* tree)
 		chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 		tree->Search(x1, y1, x2, y2, t1, t2, resArray);
 		chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
-		
+
 		duration += chrono::duration_cast<chrono::microseconds>( end - start );	
 
 		outfile << "Test #" << cont++ << endl;
@@ -94,9 +94,9 @@ void readQueries(const char *inFilename, const char *outFilename, FNRTree* tree)
 		outfile << endl << endl;
 	}
 
-	//cout << "   > Queries time  = " << right << setw(10);
-	cout << duration.count(); cout << endl;
-	//cout << " microseconds" << endl;
+	cout << "   > Queries time  = " << right << setw(10);
+	cout << duration.count();
+	cout << " microseconds" << endl;
 	outfile.close();
 }
 
@@ -121,19 +121,19 @@ int main(int argc, char const *argv[])
 	//chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 	readNodes(nodesFile, Nodes);
 	readEdges(edgesFile, Nodes, &kk);
-	
+
 	chrono::high_resolution_clock::time_point start2 = chrono::high_resolution_clock::now();
 	readBrinkhoff(trajectoriesFile, &kk);
-	
+
 	chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
-	
-	//cout << "> FNR-Tree indicators:" << endl;
-	//cout << "   > MEMORY USAGE  = " << right << setw(10);
-	cout << kk.size(); cout << endl;
-	//cout << " Bytes" << endl;
-	//cout << "   > Building time = " << right << setw(10);
-	cout << chrono::duration_cast<chrono::microseconds>( end - start2 ).count(); cout << endl;
-	//cout << " microseconds" << endl;
+
+	cout << "> FNR-Tree indicators:" << endl;
+	cout << "   > MEMORY USAGE  = " << right << setw(10);
+	cout << kk.size();
+	cout << " Bytes" << endl;
+	cout << "   > Building time = " << right << setw(10);
+	cout << chrono::duration_cast<chrono::microseconds>( end - start2 ).count();
+	cout << " microseconds" << endl;
 
 	readQueries(queriesFile, outFile, &kk);
 	//cout << endl;
