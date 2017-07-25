@@ -1,5 +1,8 @@
 # Too heavy for github
 data/San_Francisco/trajectories/2000.dat
+Scripts/10ktest.sh
+data/Oldenburg/trajectories/10000.dat
+data/San_Francisco/trajectories/10000.dat
 
 # Prerequisites
 *.d
