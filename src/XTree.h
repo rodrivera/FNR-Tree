@@ -15,6 +15,8 @@
 #include "includes/rtree/RTree.h"
 #include "includes/intervaltree/IntervalTree.h"
 
+#include <map>
+
 using namespace std;
 
 class XTree
@@ -110,6 +112,18 @@ public:
 			totalSize += num_intervals*sizeof(intervals[0]);
 
 			return totalSize;
+		}
+		size_t S_size()
+		{
+			return sizeof(SpatialLeaf) + sizeof(Line);
+		}
+		size_t T_size()
+		{
+			return sizeof(IntervalTree<pair<long, bool>, double >) + num_intervals*sizeof(intervals[0]);
+		}
+		size_t leaf_stats()
+		{
+			return num_intervals;
 		}
 	};
 
@@ -355,6 +369,40 @@ public:
 		}
 
 		return totalSize;
+	}
+
+	pair<size_t,size_t> dSize()
+	{
+		size_t spatialSize = sizeof(SpatialLevel);
+		size_t temporalSize = 0;
+
+		RTree<SpatialLeaf*, int, 2, float>::Iterator it;
+		SpatialLevel->GetFirst(it);
+
+		while(! (SpatialLevel->IsNull(it)) )
+		{
+			spatialSize += (*it)->S_size();
+			temporalSize += (*it)->T_size();
+			SpatialLevel->GetNext(it);
+		}
+
+		return pair<size_t,size_t>(spatialSize,temporalSize);		
+	}
+
+	map<long,long> stats()
+	{
+		map<long,long> counters;
+
+		RTree<SpatialLeaf*, int, 2, float>::Iterator it;
+		SpatialLevel->GetFirst(it);
+
+		while(! (SpatialLevel->IsNull(it)) )
+		{
+			counters[(*it)->leaf_stats()]++;
+			SpatialLevel->GetNext(it);
+		}
+
+		return counters;
 	}
 
 }; 

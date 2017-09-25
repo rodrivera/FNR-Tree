@@ -134,6 +134,19 @@ int main(int argc, char const *argv[])
 	cout << "   > Building time = " << right << setw(10);
 	cout << chrono::duration_cast<chrono::microseconds>( end - start2 ).count();
 	cout << " microseconds" << endl;
+	
+/*
+	pair<size_t,size_t> dSize = kk.dSize();
+	cout << "sSize: " << dSize.first << endl << "tSize: " << dSize.second << endl;
+*/
+
+	map<long,long> stats = kk.stats();
+	map<long,long>::iterator it = stats.begin();
+	while(it != stats.end()){
+		cout << (*it).first << " " << (*it).second << endl;
+		it++;
+	}
+
 
 	readQueries(queriesFile, outFile, &kk);
 	cout << endl;
